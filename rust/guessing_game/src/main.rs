@@ -38,6 +38,8 @@ fn main() {
                                 "Sorry! Your guess is bigger but you are too far from target number!"
                             );
                         }
+
+                        continue;
                     }
                     Ordering::Less => {
                         if target_number.abs_diff(guess_number) <= 10 {
@@ -49,12 +51,9 @@ fn main() {
                                 "Sorry! Your guess is smaller but you are too far from target number!"
                             );
                         }
-                    }
-                }
 
-                if let Ordering::Equal = target_number.cmp(&guess_number) {
-                } else {
-                    continue;
+                        continue;
+                    }
                 }
 
                 break;
