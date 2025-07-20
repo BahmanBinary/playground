@@ -2,11 +2,12 @@ use std::io;
 
 use guessing_game::inputs::Guess;
 use rand;
+use std::cmp::Ordering;
 
 fn main() {
     println!("Welcome to guessing game!");
 
-    let random_number = rand::random_range(1..=100);
+    let target_number = rand::random_range(1..=100);
 
     loop {
         println!("Please guess a number:");
@@ -21,17 +22,38 @@ fn main() {
 
         match guess {
             Ok(guess) => {
-                let number = guess.value;
+                let guess_number = guess.value;
 
-                if random_number == number {
-                    println!("Congratulation!!! you find the target number: {number}")
-                } else {
-                    if random_number.abs_diff(number) <= 10 {
-                        println!("OMG! you are close to target number!")
-                    } else {
-                        println!("Sorry! you are too far from target number!")
+                match guess_number.cmp(&target_number) {
+                    Ordering::Equal => {
+                        println!("Congratulation!!! You find the target number: {guess_number}");
                     }
+                    Ordering::Greater => {
+                        if target_number.abs_diff(guess_number) <= 10 {
+                            println!(
+                                "OMG! Your guess is bigger but you are close to target number!"
+                            );
+                        } else {
+                            println!(
+                                "Sorry! Your guess is bigger but you are too far from target number!"
+                            );
+                        }
+                    }
+                    Ordering::Less => {
+                        if target_number.abs_diff(guess_number) <= 10 {
+                            println!(
+                                "OMG! Your guess is smaller but you are close to target number!"
+                            );
+                        } else {
+                            println!(
+                                "Sorry! Your guess is smaller but you are too far from target number!"
+                            );
+                        }
+                    }
+                }
 
+                if let Ordering::Equal = target_number.cmp(&guess_number) {
+                } else {
                     continue;
                 }
 
